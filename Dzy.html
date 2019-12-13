@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>guanggao</title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="animate.js"></script>
+    <style type="text/css">
+    	*{
+    		padding:0;
+    		margin:0;
+    	}
+
+    	ol li{
+    		list-style: none;
+    		text-align: center;
+    	}
+    	.box{
+    		width:1200px;
+    		height: 397px;
+    		border:1px solid white;
+    		margin:10px auto;
+    		position: relative;
+    		overflow: hidden;
+    	}
+    	.ti{
+    		width:1536px;
+    		height:25px;
+    		background-color: #ccc;
+    		overflow: hidden;
+    		margin-bottom: 6px;
+
+    	}
+    	.tu{
+    		width: 16px;
+    		height: 16px;
+    		position: fixed;
+    		left: 300px;
+    		margin-top: 3px;
+
+    	}
+    	.zi{
+    		width:900px;
+    		height: 28px;
+    		position: fixed;
+    		left: 320px;
+    		overflow: hidden;
+    		font-size: 10px;
+    		
+    	}
+    	.word{
+    		margin-top: 3px;
+    		text-align: center;
+    		height: 15px;
+    		color: red;
+    		font-size: 15px;
+    		position: relative;
+    		right: -552px;
+    	}
+    	.slider{
+    		width: 8400px;
+    		position: absolute;
+    		left:-1200px;
+
+    	}
+    	.slide{
+    		width:1200px;
+    		overflow: hidden;
+    		float: left;
+
+    	}
+    	.box>span{
+    		display: block;
+    		width:30px;
+    		height: 50px;
+    		text-align: center;
+    		cursor:pointer;
+    		color:;
+    		top:175px;
+    		line-height: 50px;
+    		background: rgb(255,0,0);
+    		font-size:30px;
+    		position: absolute;
+    		opacity: 0;
+    	}
+    	#left{
+    		left:30px;
+    	}
+    	#right{
+    		right: 30px;
+    	}
+    	.nav{
+    		position:absolute;
+    		left:500px;
+    		bottom:20px;
+    	}
+    	.nav>li{
+    		float:left;
+    		width:20px;
+    		height:20px;
+    		background: #ccc;
+    		cursor:pointer;
+    		margin:0 10px;
+    		border-radius: 50%;
+    	}
+    	.nav .active{
+    		background: red;
+    	}
+    </style>
+</head>
+<body>
+	<div class="ti" id="ti">
+			<div class="tu" id="tu"><img src="images/a15.png"></div>
+			<div class="zi" id="zi">
+				<div class="word" id="word">[温馨提示]最近有不少不法分子在网上骗人，请大家注意！！！</div>
+				</div>
+			</div>
+	<div class="box" id="box">
+		
+    	<div class="slider" id="slider" style="left:-4800px;"><img src="" alt="">
+    		<div class="slide"><img src="images/b5.png" alt=""></div>
+    		<div class="slide"><img src="images/b1.png" alt=""></div>
+    		<div class="slide"><img src="images/b2.png" alt=""></div>
+    		<div class="slide"><img src="images/b3.png" alt=""></div>
+    		<div class="slide"><img src="images/b4.png" alt=""></div>
+    		<div class="slide"><img src="images/b5.png" alt=""></div>
+    		<div class="slide"><img src="images/b1.png" alt=""></div>
+    	</div>
+    	<span id="left" style="opacity:0.5;"><</span>
+    	<span id="right"style="opacity:0.5;">></span>
+    	<ol class="nav" id="nav">
+    		<li class="active">1</li>
+    		<li>2</li>
+    		<li>3</li>
+    		<li>4</li>
+    		<li>5</li>
+    	</ol>
+	</div>
+	<script type="text/javascript">
+		var ti = document.getElementById('ti')
+		var box = document.getElementById('box'); 
+		var oNavlist = document.getElementsByClassName('nav')[0].children;
+		var slider = document.getElementById('slider');
+		var word = document.getElementById('word');
+		var left = document.getElementById('left');
+		var right = document.getElementById('right');
+		var index = 1;
+		var timer;
+		var isMoving = false;
+		function getStyle(obj, style){
+			if(obj.currentStyle){
+				return obj.currentStyle;
+			} else {
+				return getComputedStyle(obj)[style];
+			}
+		}
+		setInterval("fun()",50);
+		function fun(){
+			var aa = parseInt(getStyle(word,'right'));
+			word.style.right = aa + 4 +"px";
+			if(aa == 520){
+				word.style.right = "-900px";
+			}
+			
+		}
+		function next(){
+			if(isMoving){
+				return;
+			}
+				isMoving = true;
+				index++;
+				navChange();
+				animate(slider,{left:-1200*index},function(){
+					if(index > 5){
+						slider.style.left = "-1200px";
+						index = 1;
+					}
+					isMoving = false;
+				});
+				
+		}
+		function prev(){
+			if(isMoving){
+				return;
+			}
+			isMoving = true;
+			index--;
+			navChange();
+			animate(slider,{left:-1200*index},function(){
+				if(index === 0){
+					slider.style.left = -1200*5+"px";
+					index = 5;
+				}
+				isMoving = false;
+			});
+		}
+		var timer = setInterval(next,2000);
+		//鼠标划入清定时器
+		box.onmouseover = function(){
+			animate(left,{opacity:50});
+			animate(right,{opacity:50});
+			clearInterval(timer)
+		}
+		//鼠标划出开定时器
+		box.onmouseout = function(){
+			animate(left,{opacity:0});
+			animate(right,{opacity:0});
+			timer = setInterval(next,2000);
+		}
+		right.onclick = next;
+		left.onclick = prev;
+		for(var i =0;i<5;i++){
+			oNavlist[i].idx = i;
+			oNavlist[i].onclick = function(){
+				index = this.idx + 1;
+				navChange();
+				animate(slider,{left:-1200*index});
+			}
+		}
+		//小按钮背景色切换
+		function navChange(){
+			for(var i = 0;i<5;i++){
+				oNavlist[i].className = '';
+			}
+			if(index > 5){
+				oNavlist[0].className = 'active';
+			}else if(index === 0){
+				oNavlist[4].className = 'active';
+			}
+			else{
+				oNavlist[index-1].className = 'active';
+			}
+		}
+	</script>
+</body>
+<html>
